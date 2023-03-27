@@ -21,7 +21,7 @@
         <link rel="next" href="../conversion/">
       
       <link rel="icon" href="../assets/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.3">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.4">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.c4a75a56.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.240905d7.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
@@ -17776,7 +17776,7 @@ https://developers.google.com/earth-engine/tutorials/community/introduction-to-d
 
 
 <h2 id="geemap.common.ee_export_image" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">ee_export_image</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">crs_transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_per_band</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;ZIPPED_GEO_TIFF&#39;</span><span class="p">,</span> <span class="n">unmask_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">ee_export_image</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">crs_transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_per_band</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;ZIPPED_GEO_TIFF&#39;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unmask_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#geemap.common.ee_export_image" class="headerlink" title="Permanent link">&para;</a></h2>
@@ -17852,6 +17852,12 @@ filePerBand and all band-level transformations will be ignored. Loading a NumPy 
         <td><code>&#39;ZIPPED_GEO_TIFF&#39;</code></td>
       </tr>
       <tr>
+        <td><code>unzip</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to unzip the downloaded file. Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
         <td><code>unmask_value</code></td>
         <td><code>float</code></td>
         <td><p>The value to use for pixels that are masked in the input image.
@@ -17884,6 +17890,7 @@ If the exported image contains zero values, you should set the unmask value to a
     <span class="n">dimensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">file_per_band</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;ZIPPED_GEO_TIFF&quot;</span><span class="p">,</span>
+    <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">unmask_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
     <span class="n">proxies</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -17901,6 +17908,7 @@ If the exported image contains zero values, you should set the unmask value to a
 <span class="sd">        file_per_band (bool, optional): Whether to produce a different GeoTIFF per band. Defaults to False.</span>
 <span class="sd">        format (str, optional):  One of: &quot;ZIPPED_GEO_TIFF&quot; (GeoTIFF file(s) wrapped in a zip file, default), &quot;GEO_TIFF&quot; (GeoTIFF file), &quot;NPY&quot; (NumPy binary format). If &quot;GEO_TIFF&quot; or &quot;NPY&quot;,</span>
 <span class="sd">            filePerBand and all band-level transformations will be ignored. Loading a NumPy output results in a structured array.</span>
+<span class="sd">        unzip (bool, optional): Whether to unzip the downloaded file. Defaults to True.</span>
 <span class="sd">        unmask_value (float, optional): The value to use for pixels that are masked in the input image.</span>
 <span class="sd">            If the exported image contains zero values, you should set the unmask value to a  non-zero value so that the zero values are not treated as missing data. Defaults to None.</span>
 <span class="sd">        timeout (int, optional): The timeout in seconds for the request. Defaults to 300.</span>
@@ -17943,7 +17951,8 @@ If the exported image contains zero values, you should set the unmask value to a
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;crs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">crs</span>
         <span class="k">if</span> <span class="n">crs_transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">params</span><span class="p">[</span><span class="s2">&quot;crs_transform&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">crs_transform</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">format</span>
+        <span class="k">if</span> <span class="nb">format</span> <span class="o">!=</span> <span class="s2">&quot;ZIPPED_GEO_TIFF&quot;</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">format</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">url</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">getDownloadURL</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
@@ -17968,9 +17977,10 @@ If the exported image contains zero values, you should set the unmask value to a
         <span class="k">return</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">filename_zip</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
-            <span class="n">z</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename_zip</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unzip</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">filename_zip</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+                <span class="n">z</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename_zip</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">file_per_band</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data downloaded to </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -46191,7 +46201,7 @@ such as https://developers.google.com/earth-engine/datasets/catalog/MODIS_051_MC
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "search.highlight", "search.share"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.efa0ade1.min.js"></script>
+      <script src="../assets/javascripts/bundle.19047be9.min.js"></script>
       
         <script src="../js/timeago.min.js"></script>
       
