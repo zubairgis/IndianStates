@@ -8498,6 +8498,10 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
         <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
         <span class="n">ee_object</span> <span class="o">=</span> <span class="n">layer_dict</span><span class="p">[</span><span class="s2">&quot;ee_object&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">ee</span><span class="o">.</span><span class="n">Geometry</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">ee</span><span class="o">.</span><span class="n">Feature</span><span class="p">):</span>
+            <span class="n">ee_object</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">FeatureCollection</span><span class="p">(</span><span class="n">ee_object</span><span class="p">)</span>
+
         <span class="n">ee_layer</span> <span class="o">=</span> <span class="n">layer_dict</span><span class="p">[</span><span class="s2">&quot;ee_layer&quot;</span><span class="p">]</span>
         <span class="n">vis_params</span> <span class="o">=</span> <span class="n">layer_dict</span><span class="p">[</span><span class="s2">&quot;vis_params&quot;</span><span class="p">]</span>
 
@@ -9224,7 +9228,13 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
                 <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;description_width&quot;</span><span class="p">:</span> <span class="s2">&quot;initial&quot;</span><span class="p">},</span>
                 <span class="n">layout</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">padding</span><span class="o">=</span><span class="s2">&quot;0px&quot;</span><span class="p">),</span>
             <span class="p">)</span>
-            <span class="n">widgets</span><span class="o">.</span><span class="n">jslink</span><span class="p">((</span><span class="n">color_opacity</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span> <span class="p">(</span><span class="n">color_opacity_label</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">))</span>
+
+            <span class="k">def</span> <span class="nf">color_opacity_change</span><span class="p">(</span><span class="n">change</span><span class="p">):</span>
+                <span class="n">color_opacity_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">change</span><span class="p">[</span><span class="s2">&quot;new&quot;</span><span class="p">])</span>
+
+            <span class="n">color_opacity</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">color_opacity_change</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+            <span class="c1"># widgets.jslink((color_opacity, &quot;value&quot;), (color_opacity_label, &quot;value&quot;))</span>
 
             <span class="n">point_size</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntText</span><span class="p">(</span>
                 <span class="n">value</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
@@ -9299,10 +9309,16 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
                 <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;description_width&quot;</span><span class="p">:</span> <span class="s2">&quot;initial&quot;</span><span class="p">},</span>
                 <span class="n">layout</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">padding</span><span class="o">=</span><span class="s2">&quot;0px&quot;</span><span class="p">),</span>
             <span class="p">)</span>
-            <span class="n">widgets</span><span class="o">.</span><span class="n">jslink</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">fill_color_opacity</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
-                <span class="p">(</span><span class="n">fill_color_opacity_label</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
-            <span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">fill_color_opacity_change</span><span class="p">(</span><span class="n">change</span><span class="p">):</span>
+                <span class="n">fill_color_opacity_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">change</span><span class="p">[</span><span class="s2">&quot;new&quot;</span><span class="p">])</span>
+
+            <span class="n">fill_color_opacity</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">fill_color_opacity_change</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+            <span class="c1"># widgets.jslink(</span>
+            <span class="c1">#     (fill_color_opacity, &quot;value&quot;),</span>
+            <span class="c1">#     (fill_color_opacity_label, &quot;value&quot;),</span>
+            <span class="c1"># )</span>
 
             <span class="n">color_picker</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">ColorPicker</span><span class="p">(</span>
                 <span class="n">concise</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -9686,65 +9702,75 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
                 <span class="k">elif</span> <span class="p">(</span>
                     <span class="n">style_chk</span><span class="o">.</span><span class="n">value</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span>
                 <span class="p">):</span>
-                    <span class="n">colors</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
-                        <span class="p">[</span>
-                            <span class="n">color</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fill_color_opacity</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-                            <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-                        <span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="n">arr</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">aggregate_array</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-                    <span class="n">fc</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
-                        <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">set</span><span class="p">({</span><span class="s2">&quot;styleIndex&quot;</span><span class="p">:</span> <span class="n">arr</span><span class="o">.</span><span class="n">indexOf</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">))})</span>
-                    <span class="p">)</span>
-                    <span class="n">step</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">ceil</span><span class="p">()</span>
-                    <span class="n">fc</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
-                        <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-                            <span class="p">{</span>
-                                <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">color</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-                                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">color_opacity</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))[</span>
-                                        <span class="mi">2</span><span class="p">:</span>
-                                    <span class="p">]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-                                    <span class="s2">&quot;pointSize&quot;</span><span class="p">:</span> <span class="n">point_size</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                                    <span class="s2">&quot;pointShape&quot;</span><span class="p">:</span> <span class="n">point_shape</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                                    <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">line_width</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                                    <span class="s2">&quot;lineType&quot;</span><span class="p">:</span> <span class="n">line_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                                    <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                                        <span class="n">ee</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span>
-                                            <span class="n">ee</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;styleIndex&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
-                                        <span class="p">)</span><span class="o">.</span><span class="n">floor</span><span class="p">()</span>
-                                    <span class="p">),</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">colors</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="n">color</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fill_color_opacity</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))[</span>
+                                    <span class="mi">2</span><span class="p">:</span>
+                                <span class="p">]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+                        <span class="n">arr</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">aggregate_array</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                        <span class="n">fc</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                            <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                                <span class="p">{</span><span class="s2">&quot;styleIndex&quot;</span><span class="p">:</span> <span class="n">arr</span><span class="o">.</span><span class="n">indexOf</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">))}</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="n">step</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">ceil</span><span class="p">()</span>
+                        <span class="n">fc</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                            <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                                <span class="p">{</span>
+                                    <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">color</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">color_opacity</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))[</span>
+                                            <span class="mi">2</span><span class="p">:</span>
+                                        <span class="p">]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+                                        <span class="s2">&quot;pointSize&quot;</span><span class="p">:</span> <span class="n">point_size</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                        <span class="s2">&quot;pointShape&quot;</span><span class="p">:</span> <span class="n">point_shape</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                        <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">line_width</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                        <span class="s2">&quot;lineType&quot;</span><span class="p">:</span> <span class="n">line_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                        <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                                            <span class="n">ee</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span>
+                                                <span class="n">ee</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;styleIndex&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+                                                    <span class="n">step</span>
+                                                <span class="p">)</span>
+                                            <span class="p">)</span><span class="o">.</span><span class="n">floor</span><span class="p">()</span>
+                                        <span class="p">),</span>
+                                    <span class="p">}</span>
                                 <span class="p">}</span>
-                            <span class="p">}</span>
+                            <span class="p">)</span>
                         <span class="p">)</span>
-                    <span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span>
-                        <span class="n">fc</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;styleProperty&quot;</span><span class="p">:</span> <span class="s2">&quot;style&quot;</span><span class="p">}),</span>
-                        <span class="p">{},</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">new_layer_name</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="p">(</span>
-                        <span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-                        <span class="ow">and</span> <span class="n">legend_chk</span><span class="o">.</span><span class="n">value</span>
-                        <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">legend_labels</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
-                    <span class="p">):</span>
-                        <span class="n">legend_colors</span> <span class="o">=</span> <span class="p">[</span>
-                            <span class="n">color</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-                        <span class="p">]</span>
-                        <span class="n">legend_keys</span> <span class="o">=</span> <span class="p">[</span>
-                            <span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">legend_labels</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-                        <span class="p">]</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">add_legend</span><span class="p">(</span>
-                            <span class="n">title</span><span class="o">=</span><span class="n">legend_title</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                            <span class="n">legend_keys</span><span class="o">=</span><span class="n">legend_keys</span><span class="p">,</span>
-                            <span class="n">legend_colors</span><span class="o">=</span><span class="n">legend_colors</span><span class="p">,</span>
-                            <span class="n">layer_name</span><span class="o">=</span><span class="n">new_layer_name</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span>
+                            <span class="n">fc</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;styleProperty&quot;</span><span class="p">:</span> <span class="s2">&quot;style&quot;</span><span class="p">}),</span>
+                            <span class="p">{},</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">new_layer_name</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                         <span class="p">)</span>
-                <span class="n">ee_layer</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="n">compute_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                            <span class="ow">and</span> <span class="n">legend_chk</span><span class="o">.</span><span class="n">value</span>
+                            <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">legend_labels</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                        <span class="p">):</span>
+                            <span class="n">legend_colors</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">color</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                            <span class="p">]</span>
+                            <span class="n">legend_keys</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">legend_labels</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                            <span class="p">]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">add_legend</span><span class="p">(</span>
+                                <span class="n">title</span><span class="o">=</span><span class="n">legend_title</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                <span class="n">legend_keys</span><span class="o">=</span><span class="n">legend_keys</span><span class="p">,</span>
+                                <span class="n">legend_colors</span><span class="o">=</span><span class="n">legend_colors</span><span class="p">,</span>
+                                <span class="n">layer_name</span><span class="o">=</span><span class="n">new_layer_name</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                            <span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                        <span class="n">compute_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;Error: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                    <span class="n">ee_layer</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">compute_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
             <span class="k">def</span> <span class="nf">close_btn_clicked</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">remove_control</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vis_control</span><span class="p">)</span>
@@ -20454,6 +20480,10 @@ os.environ[&#39;LOCALTILESERVER_CLIENT_PREFIX&#39;] = &#39;proxy/{port}&#39;
     <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
     <span class="n">ee_object</span> <span class="o">=</span> <span class="n">layer_dict</span><span class="p">[</span><span class="s2">&quot;ee_object&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">ee</span><span class="o">.</span><span class="n">Geometry</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">ee</span><span class="o">.</span><span class="n">Feature</span><span class="p">):</span>
+        <span class="n">ee_object</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">FeatureCollection</span><span class="p">(</span><span class="n">ee_object</span><span class="p">)</span>
+
     <span class="n">ee_layer</span> <span class="o">=</span> <span class="n">layer_dict</span><span class="p">[</span><span class="s2">&quot;ee_layer&quot;</span><span class="p">]</span>
     <span class="n">vis_params</span> <span class="o">=</span> <span class="n">layer_dict</span><span class="p">[</span><span class="s2">&quot;vis_params&quot;</span><span class="p">]</span>
 
@@ -21180,7 +21210,13 @@ os.environ[&#39;LOCALTILESERVER_CLIENT_PREFIX&#39;] = &#39;proxy/{port}&#39;
             <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;description_width&quot;</span><span class="p">:</span> <span class="s2">&quot;initial&quot;</span><span class="p">},</span>
             <span class="n">layout</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">padding</span><span class="o">=</span><span class="s2">&quot;0px&quot;</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">widgets</span><span class="o">.</span><span class="n">jslink</span><span class="p">((</span><span class="n">color_opacity</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span> <span class="p">(</span><span class="n">color_opacity_label</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">color_opacity_change</span><span class="p">(</span><span class="n">change</span><span class="p">):</span>
+            <span class="n">color_opacity_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">change</span><span class="p">[</span><span class="s2">&quot;new&quot;</span><span class="p">])</span>
+
+        <span class="n">color_opacity</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">color_opacity_change</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+        <span class="c1"># widgets.jslink((color_opacity, &quot;value&quot;), (color_opacity_label, &quot;value&quot;))</span>
 
         <span class="n">point_size</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">IntText</span><span class="p">(</span>
             <span class="n">value</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
@@ -21255,10 +21291,16 @@ os.environ[&#39;LOCALTILESERVER_CLIENT_PREFIX&#39;] = &#39;proxy/{port}&#39;
             <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;description_width&quot;</span><span class="p">:</span> <span class="s2">&quot;initial&quot;</span><span class="p">},</span>
             <span class="n">layout</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">padding</span><span class="o">=</span><span class="s2">&quot;0px&quot;</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">widgets</span><span class="o">.</span><span class="n">jslink</span><span class="p">(</span>
-            <span class="p">(</span><span class="n">fill_color_opacity</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">fill_color_opacity_label</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
-        <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">fill_color_opacity_change</span><span class="p">(</span><span class="n">change</span><span class="p">):</span>
+            <span class="n">fill_color_opacity_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">change</span><span class="p">[</span><span class="s2">&quot;new&quot;</span><span class="p">])</span>
+
+        <span class="n">fill_color_opacity</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">fill_color_opacity_change</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+        <span class="c1"># widgets.jslink(</span>
+        <span class="c1">#     (fill_color_opacity, &quot;value&quot;),</span>
+        <span class="c1">#     (fill_color_opacity_label, &quot;value&quot;),</span>
+        <span class="c1"># )</span>
 
         <span class="n">color_picker</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">ColorPicker</span><span class="p">(</span>
             <span class="n">concise</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -21642,65 +21684,75 @@ os.environ[&#39;LOCALTILESERVER_CLIENT_PREFIX&#39;] = &#39;proxy/{port}&#39;
             <span class="k">elif</span> <span class="p">(</span>
                 <span class="n">style_chk</span><span class="o">.</span><span class="n">value</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span>
             <span class="p">):</span>
-                <span class="n">colors</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
-                    <span class="p">[</span>
-                        <span class="n">color</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fill_color_opacity</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-                        <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-                    <span class="p">]</span>
-                <span class="p">)</span>
-                <span class="n">arr</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">aggregate_array</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-                <span class="n">fc</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">set</span><span class="p">({</span><span class="s2">&quot;styleIndex&quot;</span><span class="p">:</span> <span class="n">arr</span><span class="o">.</span><span class="n">indexOf</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">))})</span>
-                <span class="p">)</span>
-                <span class="n">step</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">ceil</span><span class="p">()</span>
-                <span class="n">fc</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-                        <span class="p">{</span>
-                            <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">color</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-                                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">color_opacity</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))[</span>
-                                    <span class="mi">2</span><span class="p">:</span>
-                                <span class="p">]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-                                <span class="s2">&quot;pointSize&quot;</span><span class="p">:</span> <span class="n">point_size</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                                <span class="s2">&quot;pointShape&quot;</span><span class="p">:</span> <span class="n">point_shape</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                                <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">line_width</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                                <span class="s2">&quot;lineType&quot;</span><span class="p">:</span> <span class="n">line_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                                <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                                    <span class="n">ee</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span>
-                                        <span class="n">ee</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;styleIndex&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">step</span><span class="p">)</span>
-                                    <span class="p">)</span><span class="o">.</span><span class="n">floor</span><span class="p">()</span>
-                                <span class="p">),</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">colors</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">color</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fill_color_opacity</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))[</span>
+                                <span class="mi">2</span><span class="p">:</span>
+                            <span class="p">]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                            <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">arr</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">aggregate_array</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                    <span class="n">fc</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                        <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                            <span class="p">{</span><span class="s2">&quot;styleIndex&quot;</span><span class="p">:</span> <span class="n">arr</span><span class="o">.</span><span class="n">indexOf</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">value</span><span class="p">))}</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">step</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">colors</span><span class="o">.</span><span class="n">size</span><span class="p">())</span><span class="o">.</span><span class="n">ceil</span><span class="p">()</span>
+                    <span class="n">fc</span> <span class="o">=</span> <span class="n">fc</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+                        <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                            <span class="p">{</span>
+                                <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">color</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">color_opacity</span><span class="o">.</span><span class="n">value</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))[</span>
+                                        <span class="mi">2</span><span class="p">:</span>
+                                    <span class="p">]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+                                    <span class="s2">&quot;pointSize&quot;</span><span class="p">:</span> <span class="n">point_size</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                    <span class="s2">&quot;pointShape&quot;</span><span class="p">:</span> <span class="n">point_shape</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                    <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">line_width</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                    <span class="s2">&quot;lineType&quot;</span><span class="p">:</span> <span class="n">line_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                    <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                                        <span class="n">ee</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span>
+                                            <span class="n">ee</span><span class="o">.</span><span class="n">Number</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;styleIndex&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span>
+                                                <span class="n">step</span>
+                                            <span class="p">)</span>
+                                        <span class="p">)</span><span class="o">.</span><span class="n">floor</span><span class="p">()</span>
+                                    <span class="p">),</span>
+                                <span class="p">}</span>
                             <span class="p">}</span>
-                        <span class="p">}</span>
+                        <span class="p">)</span>
                     <span class="p">)</span>
-                <span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span>
-                    <span class="n">fc</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;styleProperty&quot;</span><span class="p">:</span> <span class="s2">&quot;style&quot;</span><span class="p">}),</span>
-                    <span class="p">{},</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">new_layer_name</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="p">)</span>
-
-                <span class="k">if</span> <span class="p">(</span>
-                    <span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-                    <span class="ow">and</span> <span class="n">legend_chk</span><span class="o">.</span><span class="n">value</span>
-                    <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">legend_labels</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
-                <span class="p">):</span>
-                    <span class="n">legend_colors</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">color</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-                    <span class="p">]</span>
-                    <span class="n">legend_keys</span> <span class="o">=</span> <span class="p">[</span>
-                        <span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">legend_labels</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
-                    <span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">add_legend</span><span class="p">(</span>
-                        <span class="n">title</span><span class="o">=</span><span class="n">legend_title</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
-                        <span class="n">legend_keys</span><span class="o">=</span><span class="n">legend_keys</span><span class="p">,</span>
-                        <span class="n">legend_colors</span><span class="o">=</span><span class="n">legend_colors</span><span class="p">,</span>
-                        <span class="n">layer_name</span><span class="o">=</span><span class="n">new_layer_name</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span>
+                        <span class="n">fc</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;styleProperty&quot;</span><span class="p">:</span> <span class="s2">&quot;style&quot;</span><span class="p">}),</span>
+                        <span class="p">{},</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">new_layer_name</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
-            <span class="n">ee_layer</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">compute_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">legend_chk</span><span class="o">.</span><span class="n">value</span>
+                        <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">legend_labels</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                    <span class="p">):</span>
+                        <span class="n">legend_colors</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="n">color</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">palette</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                        <span class="p">]</span>
+                        <span class="n">legend_keys</span> <span class="o">=</span> <span class="p">[</span>
+                            <span class="n">label</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">legend_labels</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                        <span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">add_legend</span><span class="p">(</span>
+                            <span class="n">title</span><span class="o">=</span><span class="n">legend_title</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                            <span class="n">legend_keys</span><span class="o">=</span><span class="n">legend_keys</span><span class="p">,</span>
+                            <span class="n">legend_colors</span><span class="o">=</span><span class="n">legend_colors</span><span class="p">,</span>
+                            <span class="n">layer_name</span><span class="o">=</span><span class="n">new_layer_name</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                        <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">compute_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;Error: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="n">ee_layer</span><span class="o">.</span><span class="n">visible</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">compute_label</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">close_btn_clicked</span><span class="p">(</span><span class="n">b</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">remove_control</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vis_control</span><span class="p">)</span>
