@@ -4902,11 +4902,11 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
                     <span class="n">code</span> <span class="o">=</span> <span class="p">[</span><span class="n">line1</span><span class="p">,</span> <span class="n">line2</span><span class="p">]</span>
 
                 <span class="n">contents</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                <span class="n">create_code_cell</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+                <span class="c1"># create_code_cell(contents)</span>
                 <span class="k">with</span> <span class="n">search_output</span><span class="p">:</span>
                     <span class="n">search_output</span><span class="o">.</span><span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;# The code has been copied to the clipboard. </span><span class="se">\n</span><span class="s2"># Press Ctrl+V in a new cell to paste it.&quot;</span>
+                        <span class="s2">&quot;# The code has been copied to the clipboard. </span><span class="se">\n</span><span class="s2"># Press Ctrl+V in a new cell to paste it.</span><span class="se">\n</span><span class="s2">&quot;</span>
                     <span class="p">)</span>
                     <span class="nb">print</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
 
@@ -5023,7 +5023,10 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
                     <span class="n">assets_dropdown</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">asset_titles</span>
                     <span class="n">search_output</span><span class="o">.</span><span class="n">clear_output</span><span class="p">()</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ee_assets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">assets_dropdown</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
                         <span class="n">html_widget</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">ee_data_html</span><span class="p">(</span><span class="n">ee_assets</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">html_widget</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;No results found.&quot;</span>
                     <span class="k">with</span> <span class="n">search_output</span><span class="p">:</span>
                         <span class="n">display</span><span class="p">(</span><span class="n">html_widget</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">default_style</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cursor&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">}</span>
