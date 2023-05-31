@@ -11455,7 +11455,7 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
         <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
         <span class="k">return</span> <span class="n">tree</span>
 
-    <span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the Inspector GUI to the map.</span>
 
 <span class="sd">        Args:</span>
@@ -11463,9 +11463,9 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">ee_inspector_gui</span>
 
-        <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">add_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the Layer Manager to the map.</span>
 
 <span class="sd">        Args:</span>
@@ -11473,7 +11473,7 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">layer_manager_gui</span>
 
-        <span class="n">layer_manager_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="n">layer_manager_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;bottomright&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a widget (e.g., text, HTML, figure) to the map.</span>
@@ -14364,7 +14364,7 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 
 
 <h3 id="geemap.geemap.Map.add_inspector" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 
 <a href="#geemap.geemap.Map.add_inspector" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -14394,7 +14394,7 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 </table>
         <details class="quote">
           <summary>Source code in <code>geemap/geemap.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the Inspector GUI to the map.</span>
 
 <span class="sd">    Args:</span>
@@ -14402,7 +14402,7 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">ee_inspector_gui</span>
 
-    <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+    <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -15098,7 +15098,7 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 
 
 <h3 id="geemap.geemap.Map.add_layer_manager" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">add_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">add_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 
 <a href="#geemap.geemap.Map.add_layer_manager" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -15128,7 +15128,7 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 </table>
         <details class="quote">
           <summary>Source code in <code>geemap/geemap.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the Layer Manager to the map.</span>
 
 <span class="sd">    Args:</span>
@@ -15136,7 +15136,7 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">layer_manager_gui</span>
 
-    <span class="n">layer_manager_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+    <span class="n">layer_manager_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
