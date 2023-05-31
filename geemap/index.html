@@ -11302,13 +11302,16 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Tree</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="n">root_node</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">_pixels_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latlon</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_node</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_pixels_info</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">latlon</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">return_node</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the ipytree widget for displaying the pixel values at the mouse clicking point.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            latlon (list | tuple): The coordinates (lat, lon) of the point.</span>
 <span class="sd">            names (str | list, optional): The names of the layers to be included. Defaults to None.</span>
 <span class="sd">            visible (bool, optional): Whether to inspect visible layers only. Defaults to True.</span>
+<span class="sd">            decimals (int, optional): Number of decimals to round the pixel values. Defaults to 2.</span>
 <span class="sd">            return_node (bool, optional): If True, return the ipytree node.</span>
 <span class="sd">                Otherwise, return the ipytree tree widget. Defaults to False.</span>
 
@@ -11359,7 +11362,10 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
 
                     <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
-                        <span class="n">layer_node</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">))</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">decimals</span><span class="p">)</span>
+                        <span class="n">layer_node</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;file&quot;</span><span class="p">))</span>
 
                     <span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_node</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
@@ -11478,19 +11484,22 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
         <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
         <span class="k">return</span> <span class="n">tree</span>
 
-    <span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the Inspector GUI to the map.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            names (str | list, optional): The names of the layers to be included. Defaults to None.</span>
 <span class="sd">            visible (bool, optional): Whether to inspect visible layers only. Defaults to True.</span>
+<span class="sd">            decimals (int, optional): The number of decimal places to round the coordinates. Defaults to 2.</span>
 <span class="sd">            position (str, optional): The position of the Inspector GUI. Defaults to &quot;topright&quot;.</span>
 <span class="sd">            opened (bool, optional): Whether the control is opened. Defaults to True.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">ee_inspector_gui</span>
 
-        <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">visible</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
+        <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">visible</span><span class="p">,</span> <span class="n">decimals</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the Layer Manager to the map.</span>
@@ -14391,7 +14400,7 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 
 
 <h3 id="geemap.geemap.Map.add_inspector" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 
 <a href="#geemap.geemap.Map.add_inspector" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -14424,6 +14433,12 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
         <td><code>True</code></td>
       </tr>
       <tr>
+        <td><code>decimals</code></td>
+        <td><code>int</code></td>
+        <td><p>The number of decimal places to round the coordinates. Defaults to 2.</p></td>
+        <td><code>2</code></td>
+      </tr>
+      <tr>
         <td><code>position</code></td>
         <td><code>str</code></td>
         <td><p>The position of the Inspector GUI. Defaults to "topright".</p></td>
@@ -14439,19 +14454,22 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 </table>
         <details class="quote">
           <summary>Source code in <code>geemap/geemap.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the Inspector GUI to the map.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        names (str | list, optional): The names of the layers to be included. Defaults to None.</span>
 <span class="sd">        visible (bool, optional): Whether to inspect visible layers only. Defaults to True.</span>
+<span class="sd">        decimals (int, optional): The number of decimal places to round the coordinates. Defaults to 2.</span>
 <span class="sd">        position (str, optional): The position of the Inspector GUI. Defaults to &quot;topright&quot;.</span>
 <span class="sd">        opened (bool, optional): Whether the control is opened. Defaults to True.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">ee_inspector_gui</span>
 
-    <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">visible</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
+    <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">visible</span><span class="p">,</span> <span class="n">decimals</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
