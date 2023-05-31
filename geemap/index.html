@@ -11302,11 +11302,13 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Tree</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="n">root_node</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">_pixels_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latlon</span><span class="p">,</span> <span class="n">return_node</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_pixels_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latlon</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_node</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the ipytree widget for displaying the pixel values at the mouse clicking point.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            latlon (list | tuple): The coordinates (lat, lon) of the point.</span>
+<span class="sd">            names (str | list, optional): The names of the layers to be included. Defaults to None.</span>
+<span class="sd">            visible (bool, optional): Whether to inspect visible layers only. Defaults to True.</span>
 <span class="sd">            return_node (bool, optional): If True, return the ipytree node.</span>
 <span class="sd">                Otherwise, return the ipytree tree widget. Defaults to False.</span>
 
@@ -11315,7 +11317,15 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">ipytree</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Tree</span>
 
-        <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layers</span>
+        <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">names</span><span class="p">]</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_names</span><span class="p">:</span>
+                    <span class="n">layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_dict</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">latlon</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">sample_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getScale</span><span class="p">()</span>
 
@@ -11323,13 +11333,14 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
 
         <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">ee_object</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
-            <span class="n">layer_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_names</span>
-            <span class="n">layer_name</span> <span class="o">=</span> <span class="n">layer_names</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+            <span class="n">layer_name</span> <span class="o">=</span> <span class="n">layer</span>
+            <span class="n">ee_object</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="p">][</span><span class="s2">&quot;ee_object&quot;</span><span class="p">]</span>
             <span class="n">object_type</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_dict</span><span class="p">[</span><span class="n">layer_name</span><span class="p">][</span><span class="s2">&quot;ee_layer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
-                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">visible</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_dict</span><span class="p">[</span><span class="n">layer_name</span><span class="p">][</span><span class="s2">&quot;ee_layer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
+                    <span class="k">continue</span>
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">ee</span><span class="o">.</span><span class="n">ImageCollection</span><span class="p">):</span>
@@ -11366,11 +11377,13 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Tree</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="n">root_node</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">_objects_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latlon</span><span class="p">,</span> <span class="n">return_node</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_objects_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latlon</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_node</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the ipytree widget for displaying the Earth Engine objects at the mouse clicking point.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            latlon (list | tuple): The coordinates (lat, lon) of the point.</span>
+<span class="sd">            names (str | list, optional): The names of the layers to be included. Defaults to None.</span>
+<span class="sd">            visible (bool, optional): Whether to inspect visible layers only. Defaults to True.</span>
 <span class="sd">            return_node (bool, optional): If True, return the ipytree node.</span>
 <span class="sd">                Otherwise, return the ipytree tree widget. Defaults to False.</span>
 
@@ -11379,18 +11392,28 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">ipytree</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Tree</span>
 
-        <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layers</span>
+        <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">names</span><span class="p">]</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_names</span><span class="p">:</span>
+                    <span class="n">layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_dict</span>
+
         <span class="n">xy</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="n">latlon</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">root_node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="s2">&quot;Objects&quot;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="s2">&quot;archive&quot;</span><span class="p">)</span>
 
         <span class="n">nodes</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">ee_object</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layers</span><span class="p">):</span>
-            <span class="n">layer_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_names</span>
-            <span class="n">layer_name</span> <span class="o">=</span> <span class="n">layer_names</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+            <span class="n">layer_name</span> <span class="o">=</span> <span class="n">layer</span>
+            <span class="n">ee_object</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="n">layer</span><span class="p">][</span><span class="s2">&quot;ee_object&quot;</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_dict</span><span class="p">[</span><span class="n">layer_name</span><span class="p">][</span><span class="s2">&quot;ee_layer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
-                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">visible</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">ee_layer_dict</span><span class="p">[</span><span class="n">layer_name</span><span class="p">][</span><span class="s2">&quot;ee_layer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">visible</span><span class="p">:</span>
+                    <span class="k">continue</span>
 
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">ee</span><span class="o">.</span><span class="n">FeatureCollection</span><span class="p">):</span>
                 <span class="c1"># Check geometry type</span>
@@ -11455,15 +11478,19 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
         <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
         <span class="k">return</span> <span class="n">tree</span>
 
-    <span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the Inspector GUI to the map.</span>
 
 <span class="sd">        Args:</span>
+<span class="sd">            names (str | list, optional): The names of the layers to be included. Defaults to None.</span>
+<span class="sd">            visible (bool, optional): Whether to inspect visible layers only. Defaults to True.</span>
 <span class="sd">            position (str, optional): The position of the Inspector GUI. Defaults to &quot;topright&quot;.</span>
+<span class="sd">            opened (bool, optional): Whether the control is opened. Defaults to True.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">ee_inspector_gui</span>
 
-        <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
+        <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">visible</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the Layer Manager to the map.</span>
@@ -14364,7 +14391,7 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
 
 
 <h3 id="geemap.geemap.Map.add_inspector" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
 
 
 <a href="#geemap.geemap.Map.add_inspector" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -14385,24 +14412,46 @@ style_callback = lambda feat: {"fillColor": feat["properties"][&quot;color&quot;
   </thead>
   <tbody>
       <tr>
+        <td><code>names</code></td>
+        <td><code>str | list</code></td>
+        <td><p>The names of the layers to be included. Defaults to None.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>visible</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether to inspect visible layers only. Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
+      <tr>
         <td><code>position</code></td>
         <td><code>str</code></td>
         <td><p>The position of the Inspector GUI. Defaults to "topright".</p></td>
         <td><code>&#39;topright&#39;</code></td>
       </tr>
+      <tr>
+        <td><code>opened</code></td>
+        <td><code>bool</code></td>
+        <td><p>Whether the control is opened. Defaults to True.</p></td>
+        <td><code>True</code></td>
+      </tr>
   </tbody>
 </table>
         <details class="quote">
           <summary>Source code in <code>geemap/geemap.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">add_inspector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span> <span class="n">opened</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add the Inspector GUI to the map.</span>
 
 <span class="sd">    Args:</span>
+<span class="sd">        names (str | list, optional): The names of the layers to be included. Defaults to None.</span>
+<span class="sd">        visible (bool, optional): Whether to inspect visible layers only. Defaults to True.</span>
 <span class="sd">        position (str, optional): The position of the Inspector GUI. Defaults to &quot;topright&quot;.</span>
+<span class="sd">        opened (bool, optional): Whether the control is opened. Defaults to True.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">ee_inspector_gui</span>
 
-    <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
+    <span class="n">ee_inspector_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">visible</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
