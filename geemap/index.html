@@ -1445,6 +1445,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#geemap.geemap.Map.update_layer_manager" class="md-nav__link">
+    update_layer_manager()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#geemap.geemap.Map.user_roi_coords" class="md-nav__link">
     user_roi_coords()
   </a>
@@ -4502,6 +4509,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#geemap.geemap.Map.update_layer_manager" class="md-nav__link">
+    update_layer_manager()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#geemap.geemap.Map.user_roi_coords" class="md-nav__link">
     user_roi_coords()
   </a>
@@ -5444,6 +5458,9 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
                 <span class="nb">object</span> <span class="o">=</span> <span class="n">get_basemap</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;layer_manager_widget&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_layer_manager</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">set_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapTypeId</span><span class="o">=</span><span class="s2">&quot;HYBRID&quot;</span><span class="p">,</span> <span class="n">styles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">types</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds Google basemap and controls to the ipyleaflet map.</span>
@@ -11513,6 +11530,12 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
 
         <span class="n">layer_manager_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">opened</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">update_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the Layer Manager.&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">layer_manager_gui</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer_manager_widget</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">layer_manager_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_widget</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="nf">add_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;bottomright&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a widget (e.g., text, HTML, figure) to the map.</span>
 
@@ -11797,6 +11820,9 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
             <span class="nb">object</span> <span class="o">=</span> <span class="n">get_basemap</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
 
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;layer_manager_widget&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_layer_manager</span><span class="p">()</span>
 </code></pre></div>
         </details>
     </div>
@@ -25112,6 +25138,35 @@ appends all of the style keys to the standard Google Maps API map types.. Defaul
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="geemap.geemap.Map.update_layer_manager" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">update_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#geemap.geemap.Map.update_layer_manager" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Update the Layer Manager.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>geemap/geemap.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">update_layer_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the Layer Manager.&quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">.toolbar</span> <span class="kn">import</span> <span class="n">layer_manager_gui</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">layer_manager_widget</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="n">layer_manager_gui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_widget</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
