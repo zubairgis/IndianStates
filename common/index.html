@@ -5300,6 +5300,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/137_create_grid/" class="md-nav__link">
+        137 create grid
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -13623,6 +13637,7 @@ for compatibility with the new point_format. The file version will not be downgr
     </div>
 
   </div>
+
 
 
 
@@ -32189,7 +32204,7 @@ os.environ[&#39;LOCALTILESERVER_CLIENT_PREFIX&#39;] = f&#39;{os.environ[&#39;JUP
     <span class="kn">import</span> <span class="nn">rasterio</span>
     <span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
 
-    <span class="n">gdal</span><span class="o">.</span><span class="n">PushErrorHandler</span><span class="p">(</span><span class="s1">&#39;CPLQuietErrorHandler&#39;</span><span class="p">)</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">PushErrorHandler</span><span class="p">(</span><span class="s2">&quot;CPLQuietErrorHandler&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;The provided input file could not be found.&quot;</span><span class="p">)</span>

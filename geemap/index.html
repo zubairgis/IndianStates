@@ -3761,6 +3761,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/137_create_grid/" class="md-nav__link">
+        137 create grid
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -8918,6 +8932,12 @@ Map            (<span title="ipyleaflet.leaflet.Map">Map</span>)
 <span class="sd">            palette (list | dict): The palette (e.g., list of colors or a dict containing label and color pairs) to use for styling.</span>
 <span class="sd">            layer_name (str, optional): The name to be used for the new layer. Defaults to &quot;Untitled&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">.colormaps</span> <span class="kn">import</span> <span class="n">get_palette</span>
+
+            <span class="n">count</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">getInfo</span><span class="p">()</span>
+            <span class="n">palette</span> <span class="o">=</span> <span class="n">get_palette</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+
         <span class="n">styled_vector</span> <span class="o">=</span> <span class="n">vector_styling</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">palette</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span><span class="n">styled_vector</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;styleProperty&quot;</span><span class="p">:</span> <span class="s2">&quot;style&quot;</span><span class="p">}),</span> <span class="p">{},</span> <span class="n">layer_name</span><span class="p">)</span>
 
@@ -18443,6 +18463,12 @@ os.environ[&#39;LOCALTILESERVER_CLIENT_PREFIX&#39;] = &#39;proxy/{port}&#39;
 <span class="sd">        palette (list | dict): The palette (e.g., list of colors or a dict containing label and color pairs) to use for styling.</span>
 <span class="sd">        layer_name (str, optional): The name to be used for the new layer. Defaults to &quot;Untitled&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">.colormaps</span> <span class="kn">import</span> <span class="n">get_palette</span>
+
+        <span class="n">count</span> <span class="o">=</span> <span class="n">ee_object</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">getInfo</span><span class="p">()</span>
+        <span class="n">palette</span> <span class="o">=</span> <span class="n">get_palette</span><span class="p">(</span><span class="n">palette</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+
     <span class="n">styled_vector</span> <span class="o">=</span> <span class="n">vector_styling</span><span class="p">(</span><span class="n">ee_object</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">palette</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">addLayer</span><span class="p">(</span><span class="n">styled_vector</span><span class="o">.</span><span class="n">style</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="s2">&quot;styleProperty&quot;</span><span class="p">:</span> <span class="s2">&quot;style&quot;</span><span class="p">}),</span> <span class="p">{},</span> <span class="n">layer_name</span><span class="p">)</span>
 </code></pre></div>
