@@ -19800,25 +19800,28 @@ such as 'crs_transform'.</p></td>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">ee</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input image must be an instance of ee.Image&quot;</span><span class="p">)</span>
 
-    <span class="n">task</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">batch</span><span class="o">.</span><span class="n">Export</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">toCloudStorage</span><span class="p">(</span>
-        <span class="n">image</span><span class="p">,</span>
-        <span class="n">description</span><span class="p">,</span>
-        <span class="n">bucket</span><span class="p">,</span>
-        <span class="n">fileNamePrefix</span><span class="p">,</span>
-        <span class="n">dimensions</span><span class="p">,</span>
-        <span class="n">region</span><span class="p">,</span>
-        <span class="n">scale</span><span class="p">,</span>
-        <span class="n">crs</span><span class="p">,</span>
-        <span class="n">crsTransform</span><span class="p">,</span>
-        <span class="n">maxPixels</span><span class="p">,</span>
-        <span class="n">shardSize</span><span class="p">,</span>
-        <span class="n">fileDimensions</span><span class="p">,</span>
-        <span class="n">skipEmptyTiles</span><span class="p">,</span>
-        <span class="n">fileFormat</span><span class="p">,</span>
-        <span class="n">formatOptions</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">task</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="n">batch</span><span class="o">.</span><span class="n">Export</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">toCloudStorage</span><span class="p">(</span>
+            <span class="n">image</span><span class="p">,</span>
+            <span class="n">description</span><span class="p">,</span>
+            <span class="n">bucket</span><span class="p">,</span>
+            <span class="n">fileNamePrefix</span><span class="p">,</span>
+            <span class="n">dimensions</span><span class="p">,</span>
+            <span class="n">region</span><span class="p">,</span>
+            <span class="n">scale</span><span class="p">,</span>
+            <span class="n">crs</span><span class="p">,</span>
+            <span class="n">crsTransform</span><span class="p">,</span>
+            <span class="n">maxPixels</span><span class="p">,</span>
+            <span class="n">shardSize</span><span class="p">,</span>
+            <span class="n">fileDimensions</span><span class="p">,</span>
+            <span class="n">skipEmptyTiles</span><span class="p">,</span>
+            <span class="n">fileFormat</span><span class="p">,</span>
+            <span class="n">formatOptions</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -38930,7 +38933,7 @@ os.environ[&#39;LOCALTILESERVER_CLIENT_PREFIX&#39;] = f&#39;{os.environ[&#39;JUP
         <span class="k">return</span>
 
     <span class="k">if</span> <span class="n">in_colab_shell</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The plot_raster_3d() function is not supported in Colab.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The plot_raster() function is not supported in Colab.&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">try</span><span class="p">:</span>
@@ -39113,6 +39116,10 @@ os.environ[&#39;LOCALTILESERVER_CLIENT_PREFIX&#39;] = f&#39;{os.environ[&#39;JUP
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;USE_MKDOCS&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">in_colab_shell</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The plot_raster_3d() function is not supported in Colab.&quot;</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="k">try</span><span class="p">:</span>
